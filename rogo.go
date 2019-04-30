@@ -1,11 +1,47 @@
 package main
 
 import (
+	"fmt"
+	"log"
+	"os"
+	"strings"
+
 	tl "github.com/JoelOtter/termloop"
 )
 
 type Player struct {
 	*tl.Entity
+}
+
+type Wall struct {
+	*tl.Entity
+}
+
+func readMap(path string) string {
+	file, err := os.Open(path)
+	errCheck(err)
+	defer file.Close()
+
+	info, err := file.Stat()
+	errCheck(err)
+
+	byt := make([]byte, info.Size())
+	file.Read(byt)
+
+	return string(byt)
+}
+
+func getMap(path string) []string {
+	return strings.Split(readMap(path), "\n")
+}
+
+func proccessMap(lvl []string) {
+}
+
+func errCheck(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 // Drawable
@@ -30,7 +66,6 @@ func main() {
 	level := tl.NewBaseLevel(tl.Cell{
 		Bg: tl.ColorBlack,
 		Fg: tl.ColorGreen,
-		Ch: '.',
 	})
 
 	player := Player{
@@ -42,4 +77,9 @@ func main() {
 	game := tl.NewGame()
 	game.Screen().SetLevel(level)
 	game.Start()
+
+	arr := getMap("maps/lvl1")
+	for _, v := range arr {
+		fmt.Println(v)
+	}
 }
