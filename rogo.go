@@ -16,6 +16,15 @@ type Wall struct {
 	*tl.Entity
 }
 
+// Physical for Wall
+func (w *Wall) Position() (int, int) {
+	return w.Position()
+}
+
+func (w *Wall) Size() (int, int) {
+	return w.Size()
+}
+
 func readMap(path string) string {
 	file, err := os.Open(path)
 	errCheck(err)
@@ -49,7 +58,11 @@ func proccessMap(level *tl.BaseLevel, lvl []string) {
 				floor.SetCell(0, 0, &tl.Cell{Fg: tl.ColorGreen, Ch: '.'})
 				level.AddEntity(floor)
 			case "#":
-				level.AddEntity(tl.NewRectangle(x, y, 1, 1, tl.ColorBlue))
+				wall := Wall{
+					Entity: tl.NewEntity(x, y, 1, 1),
+				}
+				wall.SetCell(0, 0, &tl.Cell{Fg: tl.ColorBlue, Ch: '#'})
+				level.AddEntity(&wall)
 			}
 		}
 	}
