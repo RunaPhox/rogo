@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -35,7 +34,32 @@ func getMap(path string) []string {
 	return strings.Split(readMap(path), "\n")
 }
 
-func proccessMap(lvl []string) {
+func proccessMap(level *tl.BaseLevel, lvl []string) {
+	pX, pY := 0, 0
+
+	for y, row := range lvl {
+		for x, col := range row {
+			switch string(col) {
+			case "@":
+				pX, pY = x, y
+
+				fallthrough
+			case ".":
+				floor := tl.NewEntity(x, y, 1, 1)
+				floor.SetCell(0, 0, &tl.Cell{Fg: tl.ColorGreen, Ch: '.'})
+				level.AddEntity(floor)
+			case "#":
+				level.AddEntity(tl.NewRectangle(x, y, 1, 1, tl.ColorBlue))
+			}
+		}
+	}
+
+	player := Player{
+		Entity: tl.NewEntity(pX, pY, 1, 1),
+	}
+	player.SetCell(0, 0, &tl.Cell{Fg: tl.ColorRed, Ch: '@'})
+	level.AddEntity(&player)
+
 }
 
 func errCheck(err error) {
@@ -57,7 +81,7 @@ func (player *Player) Tick(event tl.Event) {
 		case tl.KeyArrowUp:
 			player.SetPosition(x, y-1)
 		case tl.KeyArrowDown:
-			player.SetPosition(x, y+2)
+			player.SetPosition(x, y+1)
 		}
 	}
 }
@@ -65,21 +89,13 @@ func (player *Player) Tick(event tl.Event) {
 func main() {
 	level := tl.NewBaseLevel(tl.Cell{
 		Bg: tl.ColorBlack,
-		Fg: tl.ColorGreen,
 	})
 
-	player := Player{
-		Entity: tl.NewEntity(1, 1, 1, 1),
-	}
-	player.SetCell(0, 0, &tl.Cell{Fg: tl.ColorRed, Ch: '@'})
-	level.AddEntity(&player)
+	arr := getMap("maps/lvl1")
+	proccessMap(level, arr)
 
 	game := tl.NewGame()
 	game.Screen().SetLevel(level)
 	game.Start()
 
-	arr := getMap("maps/lvl1")
-	for _, v := range arr {
-		fmt.Println(v)
-	}
 }
