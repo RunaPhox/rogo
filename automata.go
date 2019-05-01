@@ -15,27 +15,43 @@ func makeByteMap(width, height int) [][]byte {
 	return m2d
 }
 
-func generateAutomataData() [][]byte {
-	const width = 40
-	const height = 30
+func generateAutomataData(width, height int) [][]byte {
+	const lower = 1
+	const high = 9
+	size := 5
 
 	m2d := makeByteMap(width, height)
 	x, y := width/2, height/2
+	prevX, prevY := x, y
+	prevSize := size
 
-	const steps = 400
+	const steps = 600
 	for i := 0; i < steps; i++ {
-		if boundViolation(x, y, 1, width-1, height-1) {
-			x, y = width/2, height/2
-		}
-
 		dir := rand.Intn(4)
 
-		if m2d[y][x] == byte(' ') {
-			m2d[y][x] = byte('.')
+		b := byte('.')
+
+		prevSize = size
+		if !boundViolation(x, y, size, width, height) && m2d[y][x] == b {
+			size--
+			if size < lower {
+				size = lower
+			}
 		} else {
-			m2d[y][x] = byte(' ')
+			size++
 		}
 
+		if boundViolation(x, y, size, width, height) {
+			x, y, size = prevX, prevY, prevSize
+		}
+
+		for n := y; n < y+size-1; n++ {
+			for m := x; m < x+size-1; m++ {
+				m2d[n][m] = b
+			}
+		}
+
+		prevX, prevY = x, y
 		switch dir {
 		case 0:
 			x++

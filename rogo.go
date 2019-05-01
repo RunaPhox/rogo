@@ -20,7 +20,7 @@ func main() {
 	*/
 
 	rand.Seed(time.Now().Unix())
-	b := generateAutomataData()
+	b := generateAutomataData(70, 30)
 	b2 := automataDataWallProcessing(b)
 	s := byteMapToStringMap(b2)
 	writeMap("maps/rand", s)
