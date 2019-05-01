@@ -79,26 +79,6 @@ func automataDataWallProcessing(m2d [][]byte) [][]byte {
 	return m2d
 }
 
-func surroundedBy(m2d [][]byte, x, y int, by byte) bool {
-	boundRight := x < len(m2d[0])-1
-	boundDown := y < len(m2d)-1
-	boundUp := y > 0
-	boundLeft := x > 0
-
-	up := boundUp && m2d[y-1][x] == by
-	down := boundDown && m2d[y+1][x] == by
-
-	right := boundRight && m2d[y][x+1] == by
-	rightUp := boundRight && boundUp && m2d[y-1][x+1] == by
-	rightDown := boundRight && boundDown && m2d[y+1][x+1] == by
-
-	left := boundLeft && m2d[y][x-1] == by
-	leftUp := boundUp && boundLeft && m2d[y-1][x-1] == by
-	leftDown := boundDown && boundLeft && m2d[y+1][x-1] == by
-
-	return up || down || right || rightUp || rightDown || left || leftUp || leftDown
-}
-
 func boundViolation(x, y, size, width, height int) bool {
 	return x < 0 || x+size >= width || y < 0 || y+size >= height
 }
