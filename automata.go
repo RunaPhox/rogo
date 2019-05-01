@@ -64,6 +64,8 @@ func generateAutomataData(width, height int) [][]byte {
 		}
 	}
 
+	m2d[height/2][width/2] = byte('@')
+
 	return m2d
 }
 
