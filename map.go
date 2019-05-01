@@ -36,5 +36,4 @@ func proccessMap(level *tl.BaseLevel, lvl []string) {
 	}
 	player.SetCell(0, 0, &tl.Cell{Fg: tl.ColorRed, Ch: '@'})
 	level.AddEntity(&player)
-
 }

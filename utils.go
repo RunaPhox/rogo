@@ -6,6 +6,17 @@ import (
 	"strings"
 )
 
+func writeMap(path string, lvl []string) {
+	file, err := os.Create(path)
+	errCheck(err)
+	defer file.Close()
+
+	for _, v := range lvl {
+		file.WriteString(v)
+		file.WriteString("\n")
+	}
+}
+
 func readMap(path string) string {
 	file, err := os.Open(path)
 	errCheck(err)
@@ -22,6 +33,15 @@ func readMap(path string) string {
 
 func getMap(path string) []string {
 	return strings.Split(readMap(path), "\n")
+}
+
+func byteMapToStringMap(bmap [][]byte) []string {
+	arr := make([]string, len(bmap))
+	for i, v := range bmap {
+		arr[i] = string(v)
+	}
+
+	return arr
 }
 
 func errCheck(err error) {
