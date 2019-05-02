@@ -3,30 +3,31 @@ package main
 import (
 	"math/rand"
 	"time"
+
+	tl "github.com/JoelOtter/termloop"
 )
 
 func main() {
 	rand.Seed(time.Now().Unix())
-	/*
-		b := parametricGenerate(200, 200, 5, 22, 3, 12)
-		b2 := automataDataWallProcessing(b)
-		s := byteMapToStringMap(b2)
-		writeMap("maps/rand", s)
-	*/
-	/*
-		level := tl.NewBaseLevel(tl.Cell{
-			Bg: tl.ColorBlack,
-		})
+	w, h := 180, 60
+	roomMinW, roomMinH, roomMaxW, roomMaxH := 7, 4, 18, 10
+	sectorlow, sectorhigh := 100, 600
 
-		arr := getMap("maps/rand")
-		proccessMap(level, arr)
+	b := parametricGenerate(
+		w, h,
+		roomMinW, roomMinH, roomMaxW, roomMaxH,
+		sectorlow, sectorhigh,
+	)
+	s := byteMapToStringMap(b)
+	writeMap("maps/rand", s)
+	level := tl.NewBaseLevel(tl.Cell{
+		Bg: tl.ColorBlack,
+	})
 
-		game := tl.NewGame()
-		game.Screen().SetLevel(level)
-		game.Start()
-	*/
+	arr := getMap("maps/rand")
+	proccessMap(level, arr)
 
-	var points []Point2d
-	bsp(0, 0, 210, 46, 150, 92, true, &points)
-	printSectorPoints(points)
+	game := tl.NewGame()
+	game.Screen().SetLevel(level)
+	game.Start()
 }

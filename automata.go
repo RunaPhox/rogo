@@ -56,18 +56,6 @@ func generateAutomataData(width, height int) [][]byte {
 	return m2d
 }
 
-func automataDataWallProcessing(m2d [][]byte) [][]byte {
-	for i, row := range m2d {
-		for j, col := range row {
-			if col == byte(' ') && surroundedBy(m2d, j, i, byte('.')) {
-				m2d[i][j] = byte('#')
-			}
-		}
-	}
-
-	return m2d
-}
-
 func boundViolation(x, y, size, width, height int) bool {
 	return x < 0 || x+size >= width || y < 0 || y+size >= height
 }

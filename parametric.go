@@ -1,40 +1,64 @@
 package main
 
-import "math/rand"
+import (
+	"math/rand"
+)
 
-type Point2d struct {
-	x, y int
+type Rect struct {
+	p1, p2 Point2d
 }
 
-/*func parametricGenerate(width, height, roomhigh, sectorhight, sectorlow int) [][]byte {
-	m2d := makeByteMap(width, height)
+func parametricGenerate(width, height, roomMinW, roomMinH,
+	roomMaxW, roomMaxH, sectorlow, sectorhigh int) [][]byte {
 
+	points := generateSectionPoints(width, height, sectorlow, sectorhigh)
+	m2d := roomSplash(width, height,
+		roomMinW, roomMinH, roomMaxW, roomMaxH, points)
+	return byteMapWallProcessing(m2d)
+}
+
+func roomSplash(w, h, minW, minH, maxW, maxH int, p []Point2d) [][]byte {
+	m2d := makeByteMap(w, h)
+	for _, v := range p {
+		w, h := rand.Intn(maxW-minW)+minW,
+			rand.Intn(maxH-minH)+minH
+		m2d = fillRectWithByte(m2d, byte('.'), Rect{
+			Point2d{v.x - w/2, v.y - h/2},
+			Point2d{v.x + w - w/2 - 1, v.y + h - h/2 - 1},
+		})
+	}
+
+	return m2d
+}
+
+func generateSectionPoints(w, h, low, high int) []Point2d {
 	var points []Point2d
-	bsp(0, 0, width, height, sectorhight, sectorlow, true, &points)
-	areaDivision(m2d, points)
-}*/
+	bsp(w/10, h/6, w-w/10, h-h/6, low, high, true, &points)
+	if len(points)%2 == 1 {
+		points = points[:len(points)-1]
+	}
 
-func bsp(x, y, w, h, high, low int, vert bool, p *[]Point2d) {
-	if w*h < high {
-		if rand.Intn(10) > 5 {
-			x1, y1 := rand.Intn(w)+x, rand.Intn(h)+y
-			*p = append(*p, Point2d{x1, y1})
-			return
-		}
+	return points
+}
+
+func bsp(x, y, w, h, low, high int, vert bool, p *[]Point2d) {
+	if w*h < high && rand.Intn(3) < 2 {
+		appendPoint(x, y, w, h, p)
+		return
 	}
 
 	if w/2*h/2 < low {
-		x1, y1 := rand.Intn(w)+x, rand.Intn(h)+y
-		*p = append(*p, Point2d{x1, y1})
+		appendPoint(x, y, w, h, p)
 		return
-	} else {
-		if vert {
-			bsp(x, y, w/2, h, high, low, !vert, p)
-			bsp(x+w/2, y, w/2, h, high, low, !vert, p)
-		} else {
-			bsp(x, y, w, h/2, high, low, !vert, p)
-			bsp(x, y+h/2, w, h/2, high, low, !vert, p)
-		}
 	}
 
+	if vert {
+		rw := w/2 + rand.Intn(w/4) - w/8
+		bsp(x, y, rw, h, low, high, !vert, p)
+		bsp(x+rw, y, w-rw, h, low, high, !vert, p)
+	} else {
+		rh := h/2 + rand.Intn(h/4) - h/8
+		bsp(x, y, w, rh, low, high, !vert, p)
+		bsp(x, y+rh, w, h-rh, low, high, !vert, p)
+	}
 }

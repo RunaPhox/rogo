@@ -1,5 +1,29 @@
 package main
 
+func byteMapWallProcessing(m2d [][]byte) [][]byte {
+	for i, row := range m2d {
+		for j, col := range row {
+			if col == byte(' ') && surroundedBy(m2d, j, i, byte('.')) {
+				m2d[i][j] = byte('#')
+			}
+		}
+	}
+
+	return m2d
+}
+
+func fillRectWithByte(m2d [][]byte, byt byte, r Rect) [][]byte {
+	minX, minY, maxX, maxY := orderedPointsFromMin(r.p1, r.p2)
+
+	for i := minY; i < maxY; i++ {
+		for j := minX; j < maxX; j++ {
+			m2d[i][j] = byt
+		}
+	}
+
+	return m2d
+}
+
 func makeByteMap(width, height int) [][]byte {
 	m2d := make([][]byte, height)
 

@@ -7,10 +7,10 @@ import (
 	"strings"
 )
 
-func printSectorPoints(p []Point2d) {
-	byt := make([][]rune, 53)
+func printSectorPoints(w, h int, p []Point2d) {
+	byt := make([][]rune, h)
 	for i := range byt {
-		byt[i] = make([]rune, 230)
+		byt[i] = make([]rune, w)
 		for j := range byt[i] {
 			byt[i][j] = ' '
 		}
@@ -20,9 +20,14 @@ func printSectorPoints(p []Point2d) {
 		byt[v.y][v.x] = '+'
 	}
 
-	for _, v := range byt {
-		for _, v2 := range v {
-			fmt.Printf("%c", v2)
+	for i, v := range byt {
+		for j, v2 := range v {
+			if i == 0 || i == len(byt)-1 ||
+				j == 0 || j == len(byt[0])-1 {
+				fmt.Printf("#")
+			} else {
+				fmt.Printf("%c", v2)
+			}
 		}
 		fmt.Println()
 	}
