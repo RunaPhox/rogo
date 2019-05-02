@@ -2,19 +2,6 @@ package main
 
 import "math/rand"
 
-func makeByteMap(width, height int) [][]byte {
-	m2d := make([][]byte, height)
-
-	for i := range m2d {
-		m2d[i] = make([]byte, width)
-		for j := range m2d[i] {
-			m2d[i][j] = byte(' ')
-		}
-	}
-
-	return m2d
-}
-
 func generateAutomataData(width, height int) [][]byte {
 	const lower = 1
 	const high = 9
@@ -25,7 +12,7 @@ func generateAutomataData(width, height int) [][]byte {
 	prevX, prevY := x, y
 	prevSize := size
 
-	const steps = 600
+	const steps = 1000
 	for i := 0; i < steps; i++ {
 		dir := rand.Intn(4)
 
