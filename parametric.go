@@ -6,25 +6,24 @@ type Point2d struct {
 	x, y int
 }
 
-/*
-func parametricGenerate(width, height, roomhigh, sectorhight, sectorlow int) [][]byte {
+/*func parametricGenerate(width, height, roomhigh, sectorhight, sectorlow int) [][]byte {
 	m2d := makeByteMap(width, height)
 
 	var points []Point2d
 	bsp(0, 0, width, height, sectorhight, sectorlow, true, &points)
-}
-*/
+	areaDivision(m2d, points)
+}*/
 
 func bsp(x, y, w, h, high, low int, vert bool, p *[]Point2d) {
 	if w*h < high {
-		if true {
+		if rand.Intn(10) > 5 {
 			x1, y1 := rand.Intn(w)+x, rand.Intn(h)+y
 			*p = append(*p, Point2d{x1, y1})
 			return
 		}
 	}
 
-	if w*h <= low {
+	if w/2*h/2 < low {
 		x1, y1 := rand.Intn(w)+x, rand.Intn(h)+y
 		*p = append(*p, Point2d{x1, y1})
 		return

@@ -1,10 +1,33 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strings"
 )
+
+func printSectorPoints(p []Point2d) {
+	byt := make([][]rune, 53)
+	for i := range byt {
+		byt[i] = make([]rune, 230)
+		for j := range byt[i] {
+			byt[i][j] = ' '
+		}
+	}
+
+	for _, v := range p {
+		byt[v.y][v.x] = '+'
+	}
+
+	for _, v := range byt {
+		for _, v2 := range v {
+			fmt.Printf("%c", v2)
+		}
+		fmt.Println()
+	}
+	fmt.Println(len(p), "points")
+}
 
 func writeMap(path string, lvl []string) {
 	file, err := os.Create(path)

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math/rand"
 	"time"
 )
@@ -28,26 +27,6 @@ func main() {
 	*/
 
 	var points []Point2d
-	bsp(0, 0, 210, 46, 100, 12, true, &points)
-
-	fmt.Println(len(points))
-
-	byt := make([][]rune, 53)
-	for i := range byt {
-		byt[i] = make([]rune, 230)
-		for j := range byt[i] {
-			byt[i][j] = ' '
-		}
-	}
-
-	for _, v := range points {
-		byt[v.y][v.x] = '+'
-	}
-
-	for _, v := range byt {
-		for _, v2 := range v {
-			fmt.Printf("%c", v2)
-		}
-		fmt.Println()
-	}
+	bsp(0, 0, 210, 46, 150, 92, true, &points)
+	printSectorPoints(points)
 }
